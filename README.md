@@ -1,29 +1,50 @@
-# Create T3 App
+# AJQUIZ
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+A modern quiz application built with Next.js 13 and Clerk Authentication. Create and take quizzes, track your progress, and compete with others.
 
-## What's next? How do I make an app with this?
+## Features
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+- 🎯 Create custom quizzes with multiple choice questions
+- 📝 Take quizzes and get instant feedback
+- 📊 Track your study progress and performance
+- 🏆 View your quiz history and scores
+- 🔐 Secure authentication with Clerk
+- 📱 Fully responsive design
+- 🎨 Beautiful UI with Tailwind CSS and shadcn/ui
+- 🌙 Dark mode support
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+## Tech Stack
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+- [Next.js 13](https://nextjs.org) - React framework
+- [Clerk](https://clerk.dev) - Authentication and user management
+- [Tailwind CSS](https://tailwindcss.com) - Styling
+- [shadcn/ui](https://ui.shadcn.com) - UI components
+- [Lucide Icons](https://lucide.dev) - Icons
 
-## Learn More
+## Getting Started
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+1. Clone the repository
+2. Install dependencies with `npm install`
+3. Copy `.env.example` to `.env.local` and add your environment variables:
+   ```
+   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_publishable_key
+   CLERK_SECRET_KEY=your_secret_key
+   ```
+4. Run the development server with `npm run dev`
+5. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+## Usage
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+1. Sign up for an account using email or social providers
+2. Create your first quiz by clicking "Create Quiz" in the dashboard
+3. Add questions and multiple choice answers
+4. Share your quiz with others or take quizzes created by the community
+5. Track your progress in the dashboard
 
-## How do I deploy this?
+## Contributing
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

@@ -1,7 +1,7 @@
 import { db } from "@/server/db";
 import { quizHistory } from "@/server/db/schema";
 import { auth } from "@clerk/nextjs/server";
-import { eq, sql } from "drizzle-orm";
+import { eq, desc } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
 export async function GET() {
@@ -11,44 +11,35 @@ export async function GET() {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    // Get stats grouped by subject
-    const subjectStats = await db
+    // Get recent activities
+    const recentActivities = await db
       .select({
+        id: quizHistory.id,
         subject: quizHistory.subject,
-        quizzesTaken: sql<number>`COUNT(*)`,
-        averageScore: sql<number>`AVG(${quizHistory.score} * 100.0 / ${quizHistory.totalQuestions})`,
-        totalTime: sql<number>`SUM(${quizHistory.timeSpent})`,
-        lastAttempt: sql<string>`MAX(${quizHistory.createdAt})`,
+        score: quizHistory.score,
+        totalQuestions: quizHistory.totalQuestions,
+        timeSpent: quizHistory.timeSpent,
+        createdAt: quizHistory.createdAt,
       })
       .from(quizHistory)
       .where(eq(quizHistory.userId, userId))
-      .groupBy(quizHistory.subject);
+      .orderBy(desc(quizHistory.createdAt))
+      .limit(5);
 
-    // Transform into record format expected by the frontend
-    const statsRecord: Record<
-      string,
-      {
-        name: string;
-        quizzesTaken: number;
-        averageScore: number;
-        totalTime: number;
-        lastAttempt?: string;
-      }
-    > = {};
+    // Transform into the format expected by the frontend
+    const activities = recentActivities.map((activity) => ({
+      id: String(activity.id),
+      type: "quiz" as const,
+      subject: activity.subject,
+      score: activity.score,
+      totalQuestions: activity.totalQuestions,
+      timeSpent: activity.timeSpent,
+      createdAt: activity.createdAt,
+    }));
 
-    subjectStats.forEach((stat) => {
-      statsRecord[stat.subject.toLowerCase()] = {
-        name: stat.subject,
-        quizzesTaken: Number(stat.quizzesTaken),
-        averageScore: Number(stat.averageScore) || 0,
-        totalTime: Number(stat.totalTime) || 0,
-        lastAttempt: stat.lastAttempt,
-      };
-    });
-
-    return NextResponse.json(statsRecord);
+    return NextResponse.json(activities);
   } catch (error) {
-    console.error("Failed to fetch quiz stats:", error);
+    console.error("Failed to fetch recent activities:", error);
     return new NextResponse("Internal Error", { status: 500 });
   }
 }

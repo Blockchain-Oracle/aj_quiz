@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { useSignIn } from "@clerk/nextjs";
+import { useAuth, useSignIn } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -42,10 +42,14 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 export function LoginForm() {
+  const { userId } = useAuth();
+  const router = useRouter();
+  if (userId) {
+    router.push("/dashboard");
+  }
   const { isLoaded, signIn, setActive } = useSignIn();
   const [isLoading, setIsLoading] = React.useState(false);
   const [showPassword, setShowPassword] = React.useState(false);
-  const router = useRouter();
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -100,10 +104,12 @@ export function LoginForm() {
   return (
     <Card className="w-[400px]">
       <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl font-bold">
-          Welcome back to AJ QUIZ
+        <CardTitle className="text-center text-2xl font-bold">
+          Welcome back
         </CardTitle>
-        <CardDescription>Choose your preferred sign in method</CardDescription>
+        <CardDescription className="text-center">
+          Choose your preferred sign in method
+        </CardDescription>
       </CardHeader>
       <CardContent className="grid gap-4">
         <div className="grid grid-cols-2 gap-6">

@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { useSignUp } from "@clerk/nextjs";
+import { useAuth, useSignUp } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -53,8 +53,12 @@ type FormData = z.infer<typeof formSchema>;
 
 export function SignUpForm() {
   const { isLoaded, signUp } = useSignUp();
-  const [isLoading, setIsLoading] = React.useState(false);
+  const { userId } = useAuth();
   const router = useRouter();
+  if (userId) {
+    router.push("/dashboard");
+  }
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),

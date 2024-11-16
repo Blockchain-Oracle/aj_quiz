@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { UserButton } from "@clerk/nextjs";
 import { cn } from "@/lib/utils";
 import {
   BookOpen,
@@ -128,6 +129,31 @@ export function Sidebar() {
           </div>
         </div>
       )}
+
+      <div className="border-t p-4">
+        <div
+          className={cn(
+            "flex items-center gap-4",
+            isCollapsed && "justify-center",
+          )}
+        >
+          <UserButton
+            appearance={{
+              elements: {
+                avatarBox: "h-10 w-10",
+              },
+            }}
+          />
+          {!isCollapsed && (
+            <div className="flex flex-col">
+              <span className="text-sm font-medium">Account</span>
+              <span className="text-xs text-muted-foreground">
+                Manage your account
+              </span>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
