@@ -119,9 +119,7 @@ export default function LeaderboardPage() {
             <CardContent className="space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">Score</span>
-                <span className="font-medium">
-                  {entry.averageScore.toFixed(1)}%
-                </span>
+                <span className="font-medium">{entry.averageScore}%</span>
               </div>
               <Progress value={entry.averageScore} />
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -184,9 +182,9 @@ function LeaderboardTable({ entries }: { entries?: LeaderboardEntry[] }) {
             </div>
 
             {/* Left section */}
-            <div className="flex items-center gap-6 pl-8">
+            <div className="flex items-center gap-6 space-x-3 pl-8">
               {index === 0 && (
-                <div className="absolute -left-4 -top-2 animate-bounce">
+                <div className="absolute left-6 grid -translate-y-1/2 transform animate-bounce place-content-center">
                   <Trophy className="h-8 w-8 text-yellow-500" />
                 </div>
               )}
@@ -212,7 +210,7 @@ function LeaderboardTable({ entries }: { entries?: LeaderboardEntry[] }) {
                 />
               </div>
               <Badge className="border-none bg-gradient-to-r from-indigo-600 to-purple-600 px-3 py-1 text-white">
-                {entry.averageScore.toFixed(1)}%
+                {entry.averageScore}%
               </Badge>
             </div>
           </div>

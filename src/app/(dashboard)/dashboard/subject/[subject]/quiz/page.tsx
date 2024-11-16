@@ -187,25 +187,35 @@ export default function QuizPage() {
 
   if (showResult) {
     return (
-      <Card className="mx-auto max-w-2xl">
-        <CardHeader>
-          <CardTitle>Quiz Complete!</CardTitle>
+      <Card className="mx-auto max-w-2xl p-4 sm:p-6">
+        <CardHeader className="space-y-2 p-0 sm:p-0">
+          <CardTitle className="text-center text-xl sm:text-2xl">
+            Quiz Complete!
+          </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="text-center">
-            <div className="text-2xl font-bold">
+        <CardContent className="mt-6 space-y-6 p-0 sm:p-0">
+          <div className="space-y-4 text-center">
+            <div className="text-xl font-bold sm:text-2xl">
               Score: {score} / {questions.length}
             </div>
             <Progress
               value={(score / questions.length) * 100}
-              className="mt-4"
+              className="mt-2 sm:mt-4"
             />
           </div>
-          <div className="flex justify-center gap-4">
-            <Button onClick={() => router.push("/dashboard/subject")}>
+          <div className="flex flex-col justify-center gap-3 sm:flex-row sm:gap-4">
+            <Button
+              className="w-full sm:w-auto"
+              onClick={() => router.push("/dashboard/subject")}
+            >
               Back to Subjects
             </Button>
-            <Button onClick={() => window.location.reload()}>Try Again</Button>
+            <Button
+              className="w-full sm:w-auto"
+              onClick={() => window.location.reload()}
+            >
+              Try Again
+            </Button>
           </div>
         </CardContent>
       </Card>
@@ -215,16 +225,21 @@ export default function QuizPage() {
   const currentQ = questions[currentQuestion];
 
   return (
-    <div className="mx-auto max-w-3xl space-y-8">
-      <div className="flex items-center justify-between">
+    <div className="mx-auto max-w-3xl space-y-4 p-4 sm:space-y-8">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Question {currentQuestion + 1}</h1>
-          <p className="text-sm text-muted-foreground">
+          <h1 className="text-xl font-bold sm:text-2xl">
+            Question {currentQuestion + 1}
+          </h1>
+          <p className="text-xs text-muted-foreground sm:text-sm">
             of {questions.length} questions
           </p>
         </div>
-        <Badge variant="outline" className="flex items-center gap-2">
-          <Clock className="h-4 w-4" />
+        <Badge
+          variant="outline"
+          className="flex items-center gap-2 self-start sm:self-auto"
+        >
+          <Clock className="h-3 w-3 sm:h-4 sm:w-4" />
           {quizState.timeLeft}s
         </Badge>
       </div>
@@ -233,31 +248,36 @@ export default function QuizPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>{currentQ?.question}</CardTitle>
+          <CardTitle className="text-base sm:text-lg">
+            {currentQ?.question}
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <RadioGroup
             value={quizState.answers[currentQuestion] ?? ""}
             onValueChange={handleAnswerSelect}
-            className="space-y-4"
+            className="space-y-3 sm:space-y-4"
           >
             {currentQ?.option &&
               Object.entries(currentQ.option).map(([key, value]) => (
                 <div key={key} className="flex items-center space-x-2">
                   <RadioGroupItem value={key} id={key} />
-                  <Label htmlFor={key}>{value}</Label>
+                  <Label htmlFor={key} className="text-sm sm:text-base">
+                    {value}
+                  </Label>
                 </div>
               ))}
           </RadioGroup>
           {quizState.showExplanation && currentQ?.solution && (
-            <div className="mt-4 rounded-lg bg-muted p-4">
-              <p className="text-sm">{currentQ.solution}</p>
+            <div className="mt-4 rounded-lg bg-muted p-3 sm:p-4">
+              <p className="text-xs sm:text-sm">{currentQ.solution}</p>
             </div>
           )}
         </CardContent>
-        <CardFooter className="flex justify-between">
+        <CardFooter className="flex flex-col gap-3 sm:flex-row sm:justify-between">
           <Button
             variant="outline"
+            className="w-full text-sm sm:w-auto"
             onClick={() =>
               setQuizState((prev) => ({
                 ...prev,
@@ -268,6 +288,7 @@ export default function QuizPage() {
             {quizState.showExplanation ? "Hide" : "Show"} Explanation
           </Button>
           <Button
+            className="w-full text-sm sm:w-auto"
             onClick={handleNext}
             disabled={!quizState.answers[currentQuestion]}
           >

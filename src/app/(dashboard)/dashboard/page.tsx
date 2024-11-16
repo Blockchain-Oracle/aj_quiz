@@ -50,7 +50,7 @@ export default function DashboardPage() {
     <div className="flex-1 space-y-4 p-4 pt-6 md:p-8">
       <div className="flex items-center justify-between space-y-2">
         <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
-        <p className="text-muted-foreground">
+        <p className="hidden text-muted-foreground sm:block">
           Welcome to your learning dashboard
         </p>
       </div>
@@ -118,28 +118,36 @@ export default function DashboardPage() {
         </Card>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-        <Card className="col-span-4">
-          <CardHeader>
-            <CardTitle>Recent Activity</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Suspense fallback={<div>Loading activity...</div>}>
-              <RecentActivity />
-            </Suspense>
-          </CardContent>
-        </Card>
+      <div className="flex flex-col gap-4 md:grid md:grid-cols-2 lg:grid-cols-7">
+        <div className="w-full md:col-span-4">
+          <div className="flex snap-x snap-mandatory gap-4 pb-4 md:block">
+            <Card className="min-w-[300px] snap-center md:min-w-full">
+              <CardHeader>
+                <CardTitle>Recent Activity</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Suspense fallback={<div>Loading activity...</div>}>
+                  <RecentActivity />
+                </Suspense>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
 
-        <Card className="col-span-3">
-          <CardHeader>
-            <CardTitle>Popular Subjects</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Suspense fallback={<div>Loading subjects...</div>}>
-              <PopularSubjects />
-            </Suspense>
-          </CardContent>
-        </Card>
+        <div className="w-full md:col-span-3">
+          <div className="flex snap-x snap-mandatory gap-4 pb-4 md:block">
+            <Card className="min-w-[300px] snap-center md:min-w-full">
+              <CardHeader>
+                <CardTitle>Popular Subjects</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Suspense fallback={<div>Loading subjects...</div>}>
+                  <PopularSubjects />
+                </Suspense>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
       </div>
     </div>
   );

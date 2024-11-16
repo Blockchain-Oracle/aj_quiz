@@ -75,7 +75,7 @@ export default function SubjectsPage() {
           <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
             Subjects
           </h1>
-          <p className="text-sm text-muted-foreground sm:text-base">
+          <p className="hidden text-sm text-muted-foreground sm:block sm:text-base">
             Choose a subject to practice or take a timed quiz
           </p>
         </div>

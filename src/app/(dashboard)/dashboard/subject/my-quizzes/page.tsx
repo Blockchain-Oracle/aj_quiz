@@ -115,38 +115,44 @@ export default function MyQuizzes() {
         <CardHeader>
           <CardTitle>Quiz History</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="md:space-y-4">
           {history.length === 0 ? (
             <p className="text-center text-muted-foreground">
               No quizzes taken yet
             </p>
           ) : (
-            history.map((quiz) => (
-              <div
-                key={quiz.id}
-                className="flex items-center justify-between rounded-lg border p-4"
-              >
-                <div className="space-y-1">
-                  <p className="font-medium">{quiz.subject}</p>
-                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                    <span className="flex items-center gap-1">
-                      <Clock className="h-4 w-4" />
-                      {(quiz.timeSpent / 60).toFixed(1)}m
-                    </span>
-                    <span>{new Date(quiz.createdAt).toLocaleDateString()}</span>
+            <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 md:block">
+              {history.map((quiz) => (
+                <div
+                  key={quiz.id}
+                  className="min-w-[300px] snap-center rounded-lg border p-4 md:min-w-full md:snap-align-none"
+                >
+                  <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
+                    <div className="space-y-1">
+                      <p className="font-medium">{quiz.subject}</p>
+                      <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                        <span className="flex items-center gap-1">
+                          <Clock className="h-4 w-4" />
+                          {(quiz.timeSpent / 60).toFixed(1)}m
+                        </span>
+                        <span>
+                          {new Date(quiz.createdAt).toLocaleDateString()}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <Progress
+                        value={(quiz.score / quiz.totalQuestions) * 100}
+                        className="w-24"
+                      />
+                      <Badge variant="outline">
+                        {quiz.score}/{quiz.totalQuestions}
+                      </Badge>
+                    </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-4">
-                  <Progress
-                    value={(quiz.score / quiz.totalQuestions) * 100}
-                    className="w-32"
-                  />
-                  <Badge variant="outline">
-                    {quiz.score}/{quiz.totalQuestions}
-                  </Badge>
-                </div>
-              </div>
-            ))
+              ))}
+            </div>
           )}
         </CardContent>
       </Card>
