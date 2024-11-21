@@ -74,6 +74,7 @@ export async function GET(req: Request) {
         [subject]: subjectLeaderboard,
       };
 
+      console.log(response);
       return NextResponse.json(response);
     }
   } catch (error) {

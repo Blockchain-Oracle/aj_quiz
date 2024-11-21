@@ -17,7 +17,6 @@ export default function AuthHero() {
     >
       <div className={`absolute inset-0 ${backgroundColor}`}>
         <div className="absolute inset-0 bg-[linear-gradient(30deg,rgba(255,255,255,0.1)_0%,rgba(255,255,255,0.05)_100%)]" />
-        <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-20" />
       </div>
 
       <div className="relative z-10 flex h-full flex-col justify-around">

@@ -28,22 +28,22 @@ export async function GET() {
             .select({ count: sql<number>`count(*)` })
             .from(quizHistory)
             .where(
-              sql`${quizHistory.subject} = ${subject.name} AND ${quizHistory.createdAt} >= ${lastWeek}`,
+              sql`${quizHistory.subject} = ${subject.name} AND ${quizHistory.createdAt} >= ${lastWeek.toISOString()}`,
             ),
           db
             .select({ count: sql<number>`count(*)` })
             .from(quizHistory)
             .where(
-              sql`${quizHistory.subject} = ${subject.name} AND ${quizHistory.createdAt} >= ${twoWeeksAgo} AND ${quizHistory.createdAt} < ${lastWeek}`,
+              sql`${quizHistory.subject} = ${subject.name} AND ${quizHistory.createdAt} >= ${twoWeeksAgo.toISOString()} AND ${quizHistory.createdAt} < ${lastWeek.toISOString()}`,
             ),
         ]);
 
         const trend =
           recentCount[0]?.count &&
-          recentCount[0].count > previousCount[0]?.count
+          recentCount[0].count > (previousCount[0]?.count ?? 0)
             ? "up"
             : recentCount[0]?.count &&
-                recentCount[0].count < previousCount[0]?.count
+                recentCount[0].count < (previousCount[0]?.count ?? 0)
               ? "down"
               : "stable";
 

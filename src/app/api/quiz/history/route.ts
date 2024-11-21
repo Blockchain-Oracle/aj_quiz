@@ -16,7 +16,7 @@ export async function GET() {
       .from(quizHistory)
       .where(eq(quizHistory.userId, userId))
       .orderBy(quizHistory.createdAt);
-
+    console.log(history);
     return NextResponse.json(history);
   } catch (error) {
     console.error("Failed to fetch quiz history:", error);
@@ -31,7 +31,9 @@ export async function POST(req: Request) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const body = await req.json();
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     const result = await db.insert(quizHistory).values({
       userId,
       ...body,

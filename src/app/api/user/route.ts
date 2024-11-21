@@ -1,19 +1,13 @@
 import { db } from "@/server/db";
 import { users } from "@/server/db/schema";
-import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
-    const { userId } = await auth();
-    if (!userId) {
-      return new NextResponse("Unauthorized", { status: 401 });
-    }
-
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const body = await req.json();
-    const { username } = body as { username: string };
-
+    const { username, userId } = body as { username: string; userId: string };
+    console.log(body);
     await db
       .insert(users)
       .values({

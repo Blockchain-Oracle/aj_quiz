@@ -6,16 +6,9 @@ import ModeToggle from "@/components/ToggleDarkMode";
 
 export default function MarketingNav() {
   return (
-    <nav className="bg-background border-b">
+    <nav className="border-b bg-background">
       <div className="flex h-16 items-center justify-between px-4">
         <Link href="/" className="flex items-center space-x-2">
-          <Image
-            src="/logo/image.png"
-            alt="ajquiz logo"
-            width={30}
-            height={30}
-            className="rounded object-contain"
-          />
           <span className="text-xl font-bold">Ajquiz</span>
         </Link>
 

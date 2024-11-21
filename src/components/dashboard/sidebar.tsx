@@ -18,6 +18,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import ModeToggle from "../ToggleDarkMode";
 
 const navigation = [
   {
@@ -65,11 +66,14 @@ export function Sidebar() {
     >
       <div className="flex h-16 items-center justify-between px-4">
         {!isCollapsed && (
-          <Link href="/dashboard" className="flex items-center gap-2">
-            <GraduationCap className="h-6 w-6" />
-            <span className="font-bold">AJ Quiz</span>
-          </Link>
+          <div className="flex w-3/4 items-center justify-between gap-2">
+            <Link href="/dashboard" className="block items-center gap-2">
+              <span className="font-bold">AjQuiz</span>
+            </Link>
+            <ModeToggle />
+          </div>
         )}
+
         <Button
           variant="ghost"
           size="icon"

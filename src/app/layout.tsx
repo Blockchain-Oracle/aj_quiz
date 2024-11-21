@@ -9,14 +9,13 @@ export const metadata: Metadata = {
   title: "AjQuiz",
   description: "Test your knowledge",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
-  colorScheme: "light dark",
 };
 
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <ClerkProvider>
+    <ClerkProvider dynamic>
       <html lang="en" suppressHydrationWarning>
         <body className={GeistSans.variable}>
           <ThemeProvider

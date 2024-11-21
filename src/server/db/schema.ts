@@ -12,6 +12,7 @@ import {
   json,
   boolean,
   decimal,
+  uniqueIndex,
 } from "drizzle-orm/pg-core";
 
 /**
@@ -71,13 +72,14 @@ export const userStats = createTable(
   "user_stats",
   {
     id: integer("id").primaryKey().generatedByDefaultAsIdentity(),
-    userId: varchar("user_id", { length: 256 }).unique().notNull(),
+    userId: varchar("user_id", { length: 256 }).notNull(),
+    subject: varchar("subject", { length: 100 }).notNull(),
     totalQuizzes: integer("total_quizzes").default(0).notNull(),
     totalCorrect: integer("total_correct").default(0).notNull(),
     totalQuestions: integer("total_questions").default(0).notNull(),
     totalTimeSpent: decimal("total_time_spent", { precision: 10, scale: 2 })
       .default(sql`0`)
-      .notNull(), // in minutes
+      .notNull(),
     lastQuizDate: timestamp("last_quiz_date", { withTimezone: true }),
     createdAt: timestamp("created_at", { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
@@ -88,11 +90,14 @@ export const userStats = createTable(
     currentRank: integer("current_rank"),
     bestRank: integer("best_rank"),
     rankUpdatedAt: timestamp("rank_updated_at", { withTimezone: true }),
-    subject: varchar("subject", { length: 100 }).notNull(),
   },
   (table) => ({
     userIdIdx: index("user_stats_user_id_idx").on(table.userId),
     subjectIdx: index("user_stats_subject_idx").on(table.subject),
+    userSubjectUnique: uniqueIndex("user_subject_unique_idx").on(
+      table.userId,
+      table.subject,
+    ),
   }),
 );
 

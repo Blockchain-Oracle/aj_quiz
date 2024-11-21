@@ -25,7 +25,8 @@ export default function MyQuizzes() {
     async function fetchHistory() {
       try {
         const response = await fetch("/api/quiz/history");
-        const data = await response.json();
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        const data = (await response.json()) as QuizHistory[];
         setHistory(data);
       } catch (error) {
         toast.error("Failed to load quiz history");
@@ -103,7 +104,8 @@ export default function MyQuizzes() {
           <CardContent>
             <div className="text-2xl font-bold">
               {(
-                history.reduce((acc, quiz) => acc + quiz.timeSpent, 0) / 60
+                history.reduce((acc, quiz) => acc + Number(quiz.timeSpent), 0) /
+                60
               ).toFixed(1)}
               h
             </div>

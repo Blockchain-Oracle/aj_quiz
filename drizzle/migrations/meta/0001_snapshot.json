@@ -1,0 +1,16 @@
+{
+    "version": "5",
+    "dialect": "pg",
+    "id": "0001_drop_old_add_new_constraint",
+    "prevId": "your_previous_migration_id",
+    "tables": {
+      "aj_quiz_user_stats": {
+        "constraints": {
+          "user_subject_unique_idx": {
+            "constraintType": "UNIQUE",
+            "columns": ["user_id", "subject"]
+          }
+        }
+      }
+    }
+  }

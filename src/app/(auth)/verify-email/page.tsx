@@ -47,6 +47,7 @@ export default function VerifyEmailPage() {
           body: JSON.stringify({
             username:
               `${completeSignUp.firstName} ${completeSignUp.lastName}`.trim(),
+            userId: completeSignUp.createdUserId,
           }),
         });
         router.push("/dashboard");

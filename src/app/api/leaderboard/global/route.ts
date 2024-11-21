@@ -21,6 +21,7 @@ export async function GET() {
       )
       .limit(10);
 
+    console.log(globalLeaderboard);
     return NextResponse.json(globalLeaderboard);
   } catch (error) {
     console.error("Failed to fetch global leaderboard:", error);

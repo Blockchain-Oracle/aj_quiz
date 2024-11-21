@@ -1,6 +1,6 @@
 import { db } from "@/server/db";
 import { quizHistory, userStats } from "@/server/db/schema";
-import { and, eq } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 
 export class MetricsService {
   static async updateQuizMetrics(
@@ -11,55 +11,55 @@ export class MetricsService {
     timeSpent: number,
     answers: Record<number, string>,
   ) {
-    // Begin transaction
     return await db.transaction(async (tx) => {
-      // 1. Save quiz history
-      const [quizResult] = await tx
-        .insert(quizHistory)
-        .values({
-          userId: userId,
-          subject: subject,
-          score: score,
-          totalQuestions: totalQuestions,
-          timeSpent: timeSpent.toFixed(2),
-          mode: "practice", // Add required mode field
-          answers,
-          completed: true, // Add completed field with default value
-        })
-        .returning();
-
-      // 2. Update or create user stats
-      const existingStats = await tx
+      // 1. Check for existing quiz history
+      const existingQuiz = await tx
         .select()
-        .from(userStats)
+        .from(quizHistory)
         .where(
-          and(eq(userStats.userId, userId), eq(userStats?.subject, subject)),
+          and(
+            eq(quizHistory.userId, userId),
+            eq(quizHistory.subject, subject),
+            eq(quizHistory.completed, false),
+          ),
         )
         .limit(1);
 
-      if (existingStats.length > 0) {
-        const stats = existingStats[0] ?? {
-          totalQuizzes: 0,
-          totalQuestions: 0,
-          totalCorrect: 0,
-          totalTimeSpent: 0,
-          averageAccuracy: 0,
-        };
-        await tx
-          .update(userStats)
+      let quizResult;
+
+      if (existingQuiz.length > 0) {
+        // Update existing quiz
+        [quizResult] = await tx
+          .update(quizHistory)
           .set({
-            totalQuizzes: stats.totalQuizzes + 1,
-            totalQuestions: Number(stats.totalQuestions) + totalQuestions,
-            totalCorrect: Number(stats.totalCorrect) + score,
-            totalTimeSpent: (Number(stats.totalTimeSpent) + timeSpent).toFixed(
-              2,
-            ),
+            score: score,
+            timeSpent: timeSpent.toFixed(2),
+            answers: answers,
+            completed: true,
           })
-          .where(
-            and(eq(userStats.userId, userId), eq(userStats.subject, subject)),
-          );
+          .where(eq(quizHistory.id, existingQuiz[0]!.id))
+          .returning();
       } else {
-        await tx.insert(userStats).values({
+        // Insert new quiz
+        [quizResult] = await tx
+          .insert(quizHistory)
+          .values({
+            userId: userId,
+            subject: subject,
+            score: score,
+            totalQuestions: totalQuestions,
+            timeSpent: timeSpent.toFixed(2),
+            mode: "practice",
+            answers,
+            completed: true,
+          })
+          .returning();
+      }
+
+      // 2. Update or create user stats
+      await tx
+        .insert(userStats)
+        .values({
           userId: userId,
           subject: subject,
           totalQuizzes: 1,
@@ -67,8 +67,17 @@ export class MetricsService {
           totalCorrect: score,
           totalTimeSpent: timeSpent.toFixed(2),
           lastQuizDate: new Date(),
+        })
+        .onConflictDoUpdate({
+          target: [userStats.userId, userStats.subject],
+          set: {
+            totalQuizzes: sql`${userStats.totalQuizzes} + 1`,
+            totalQuestions: sql`${userStats.totalQuestions} + ${totalQuestions}`,
+            totalCorrect: sql`${userStats.totalCorrect} + ${score}`,
+            totalTimeSpent: sql`${userStats.totalTimeSpent} + ${parseFloat(timeSpent.toFixed(2))}`,
+            lastQuizDate: new Date(),
+          },
         });
-      }
 
       return quizResult;
     });
