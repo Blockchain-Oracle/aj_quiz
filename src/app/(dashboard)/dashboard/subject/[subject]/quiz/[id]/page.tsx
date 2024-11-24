@@ -91,7 +91,7 @@ export default function QuizPageId() {
         setQuizState((prev) => {
           if (prev.timeLeft <= 0) {
             clearInterval(timer);
-            handleNext();
+            void handleNext();
             return prev;
           }
           return { ...prev, timeLeft: prev.timeLeft - 1 };
@@ -111,7 +111,7 @@ export default function QuizPageId() {
 
   const handleNext = async () => {
     const currentAnswer = quizState.answers[currentQuestion];
-    const correctAnswer = questions[currentQuestion].answer;
+    const correctAnswer = questions[currentQuestion]?.answer;
 
     if (currentAnswer === correctAnswer) {
       setScore((prev) => prev + 1);
@@ -214,28 +214,28 @@ export default function QuizPageId() {
 
       <Card>
         <CardHeader>
-          <CardTitle>{currentQ.question}</CardTitle>
+          <CardTitle>{currentQ?.question}</CardTitle>
           <div className="flex gap-2 text-sm text-muted-foreground">
-            <Badge variant="outline">{currentQ.examtype}</Badge>
-            <Badge variant="outline">{currentQ.examyear}</Badge>
+            <Badge variant="outline">{currentQ?.examtype}</Badge>
+            <Badge variant="outline">{currentQ?.examyear}</Badge>
           </div>
         </CardHeader>
         <CardContent>
           <RadioGroup
-            value={quizState.answers[currentQuestion] || ""}
+            value={quizState.answers[currentQuestion] ?? ""}
             onValueChange={handleAnswerSelect}
             className="space-y-4"
           >
-            {Object.entries(currentQ.option).map(([key, value]) => (
+            {Object.entries(currentQ?.option ?? {}).map(([key, value]) => (
               <div key={key} className="flex items-center space-x-2">
                 <RadioGroupItem value={key} id={key} />
                 <Label htmlFor={key}>{value}</Label>
               </div>
             ))}
           </RadioGroup>
-          {quizState.showExplanation && currentQ.solution && (
+          {quizState.showExplanation && currentQ?.solution && (
             <div className="mt-4 rounded-lg bg-muted p-4">
-              <p className="text-sm">{currentQ.solution}</p>
+              <p className="text-sm">{currentQ?.solution}</p>
             </div>
           )}
         </CardContent>
